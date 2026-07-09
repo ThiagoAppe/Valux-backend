@@ -10,24 +10,24 @@ from database.connection import Base
 class CartItem(Base):
     __tablename__ = "cart_items"
 
-    Id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    CartId: Mapped[int | None] = mapped_column(
+    cartid: Mapped[int | None] = mapped_column(
         ForeignKey("carts.id"),
     )
 
-    VariantId: Mapped[int | None] = mapped_column(
+    variantid: Mapped[int | None] = mapped_column(
         ForeignKey("variants.id"),
     )
 
-    Quantity: Mapped[int | None] = mapped_column()
+    quantity: Mapped[int | None] = mapped_column()
 
-    Cart = relationship(
+    cart = relationship(
         "Cart",
-        back_populates="Items",
+        back_populates="items",
     )
 
-    Variant = relationship(
+    variant = relationship(
         "Variant",
-        back_populates="CartItems",
+        back_populates="cart_items",
     )

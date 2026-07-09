@@ -1,45 +1,69 @@
-from sqlalchemy import ForeignKey
+from datetime import datetime
+
+from sqlalchemy import Boolean
+from sqlalchemy import DateTime
 from sqlalchemy import String
+from sqlalchemy import Text
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from database.connection import Base
 
 
-class Category(Base):
-    __tablename__ = "categories"
+class Product(Base):
+    __tablename__ = "products"
 
-    Id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(
+        primary_key=True
+    )
 
-    Name: Mapped[str] = mapped_column(
+    name: Mapped[str] = mapped_column(
         String,
         nullable=False,
     )
 
-    Slug: Mapped[str] = mapped_column(
+    slug: Mapped[str] = mapped_column(
         String,
         unique=True,
         nullable=False,
     )
 
-    ParentId: Mapped[int | None] = mapped_column(
-        ForeignKey("categories.id"),
+    code: Mapped[str] = mapped_column(
+        String,
+        unique=True,
+        nullable=False,
+    )
+
+    description: Mapped[str | None] = mapped_column(
+        Text,
         nullable=True,
     )
 
-    from sqlalchemy.orm import relationship
+    active: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+    )
 
-    Variants = relationship(
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+    )
+
+    variants = relationship(
         "Variant",
-        back_populates="Product",
+        back_populates="product",
+        cascade="all, delete-orphan",
     )
 
-    Images = relationship(
+    images = relationship(
         "ProductImage",
-        back_populates="Product",
+        back_populates="product",
+        cascade="all, delete-orphan",
     )
 
-    Categories = relationship(
+    categories = relationship(
         "ProductCategory",
-        back_populates="Product",
+        back_populates="product",
+        cascade="all, delete-orphan",
     )

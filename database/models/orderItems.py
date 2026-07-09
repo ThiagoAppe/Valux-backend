@@ -6,6 +6,7 @@ from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from database.connection import Base
 
@@ -13,38 +14,36 @@ from database.connection import Base
 class OrderItem(Base):
     __tablename__ = "order_items"
 
-    Id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    OrderId: Mapped[int | None] = mapped_column(
+    orderid: Mapped[int | None] = mapped_column(
         ForeignKey("orders.id"),
     )
 
-    VariantId: Mapped[int | None] = mapped_column(
+    variantid: Mapped[int | None] = mapped_column(
         ForeignKey("variants.id"),
     )
 
-    Quantity: Mapped[int | None] = mapped_column()
+    quantity: Mapped[int | None] = mapped_column()
 
-    UnitPrice: Mapped[Decimal | None] = mapped_column(
+    unit_price: Mapped[Decimal | None] = mapped_column(
         Numeric(10, 2),
     )
 
-    ProductName: Mapped[str | None] = mapped_column(String)
+    product_name: Mapped[str | None] = mapped_column(String)
 
-    VariantName: Mapped[str | None] = mapped_column(String)
+    variant_name: Mapped[str | None] = mapped_column(String)
 
-    Sku: Mapped[str | None] = mapped_column(String)
+    sku: Mapped[str | None] = mapped_column(String)
 
-    OptionsSnapshot: Mapped[str | None] = mapped_column(Text)
+    options_snapshot: Mapped[str | None] = mapped_column(Text)
 
-    from sqlalchemy.orm import relationship
-
-    Order = relationship(
+    order = relationship(
         "Order",
-        back_populates="Items",
+        back_populates="items",
     )
 
-    Variant = relationship(
+    variant = relationship(
         "Variant",
-        back_populates="OrderItems",
+        back_populates="order_items",
     )

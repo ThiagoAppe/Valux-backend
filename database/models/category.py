@@ -1,52 +1,47 @@
-from datetime import datetime
-
-from sqlalchemy import DateTime
+from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from database.connection import Base
 
 
-class User(Base):
-    __tablename__ = "users"
+class Category(Base):
+    __tablename__ = "categories"
 
-    Id: Mapped[int] = mapped_column(
-        primary_key=True,
+    id: Mapped[int] = mapped_column(
+        primary_key=True
     )
 
-    Email: Mapped[str] = mapped_column(
-        String(255),
+    name: Mapped[str] = mapped_column(
+        String,
+        nullable=False,
+    )
+
+    slug: Mapped[str] = mapped_column(
+        String,
         unique=True,
-        index=True,
         nullable=False,
     )
 
-    PasswordHash: Mapped[str] = mapped_column(
-        String(255),
-        nullable=False,
+    parentid: Mapped[int | None] = mapped_column(
+        ForeignKey("categories.id"),
+        nullable=True,
     )
 
-    Role: Mapped[str] = mapped_column(
-        String(50),
-        nullable=False,
-    )
-
-    CreatedAt: Mapped[datetime] = mapped_column(
-        DateTime,
-        nullable=False,
-        default=datetime.utcnow,
-    )
-
-    from sqlalchemy.orm import relationship
-
-    Children = relationship(
+    parent = relationship(
         "Category",
-        back_populates="Parent",
+        remote_side=[id],
+        back_populates="children",
     )
 
-    Parent = relationship(
+    children = relationship(
         "Category",
-        remote_side=[Id],
-        back_populates="Children",
+        back_populates="parent",
+    )
+
+    products = relationship(
+        "ProductCategory",
+        back_populates="category",
     )

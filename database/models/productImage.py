@@ -11,20 +11,20 @@ from sqlalchemy.orm import relationship
 class ProductImage(Base):
     __tablename__ = "product_images"
 
-    Id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    ProductId: Mapped[int | None] = mapped_column(
+    product_id: Mapped[int | None] = mapped_column(
         ForeignKey("products.id"),
     )
 
-    Url: Mapped[str] = mapped_column(
+    path: Mapped[str] = mapped_column(
         String,
         nullable=False,
     )
 
-    SortOrder: Mapped[int | None] = mapped_column()
+    sort_order: Mapped[int | None] = mapped_column()
 
-    Product = relationship(
+    product = relationship(
         "Product",
-        back_populates="Images",
+        back_populates="images",
     )

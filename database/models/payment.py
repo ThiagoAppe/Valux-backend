@@ -7,6 +7,7 @@ from sqlalchemy import Numeric
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from database.connection import Base
 
@@ -14,32 +15,30 @@ from database.connection import Base
 class Payment(Base):
     __tablename__ = "payments"
 
-    Id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    OrderId: Mapped[int | None] = mapped_column(
+    orderid: Mapped[int | None] = mapped_column(
         ForeignKey("orders.id"),
     )
 
-    Method: Mapped[str | None] = mapped_column(String)
+    method: Mapped[str | None] = mapped_column(String)
 
-    Status: Mapped[str | None] = mapped_column(String)
+    status: Mapped[str | None] = mapped_column(String)
 
-    TransactionId: Mapped[str | None] = mapped_column(
+    transactionid: Mapped[str | None] = mapped_column(
         String,
         unique=True,
     )
 
-    Amount: Mapped[Decimal | None] = mapped_column(
+    amount: Mapped[Decimal | None] = mapped_column(
         Numeric(10, 2),
     )
 
-    CreatedAt: Mapped[datetime | None] = mapped_column(
+    created_at: Mapped[datetime | None] = mapped_column(
         DateTime,
     )
 
-    from sqlalchemy.orm import relationship
-
-    Order = relationship(
+    order = relationship(
         "Order",
-        back_populates="Payments",
+        back_populates="payments",
     )

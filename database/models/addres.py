@@ -12,25 +12,25 @@ from database.connection import Base
 class Address(Base):
     __tablename__ = "addresses"
 
-    Id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    CustomerId: Mapped[int | None] = mapped_column(
+    customerid: Mapped[int | None] = mapped_column(
         ForeignKey("customers.id"),
     )
 
-    Street: Mapped[str | None] = mapped_column(String)
+    street: Mapped[str | None] = mapped_column(String)
 
-    City: Mapped[str | None] = mapped_column(String)
+    city: Mapped[str | None] = mapped_column(String)
 
-    Province: Mapped[str | None] = mapped_column(String)
+    province: Mapped[str | None] = mapped_column(String)
 
-    PostalCode: Mapped[str | None] = mapped_column(String)
+    postal_code: Mapped[str | None] = mapped_column(String)
 
-    Country: Mapped[str | None] = mapped_column(String)
+    country: Mapped[str | None] = mapped_column(String)
 
-    IsDefault: Mapped[bool | None] = mapped_column(Boolean)
+    is_default: Mapped[bool | None] = mapped_column(Boolean)
 
-    Customer = relationship(
+    customer = relationship(
         "Customer",
-        back_populates="Addresses",
+        back_populates="addresses",
     )

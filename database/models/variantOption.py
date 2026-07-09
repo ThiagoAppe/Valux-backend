@@ -1,34 +1,32 @@
-from sqlalchemy import String
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from database.connection import Base
 
-from sqlalchemy.orm import relationship
 
-class OptionType(Base):
-    __tablename__ = "option_types"
+class VariantOption(Base):
+    __tablename__ = "variant_options"
 
-    Id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    Name: Mapped[str] = mapped_column(
-        String,
-        nullable=False,
+    variant_id: Mapped[int] = mapped_column(
+        ForeignKey("variants.id"),
     )
 
-    Code: Mapped[str] = mapped_column(
-        String,
-        unique=True,
-        nullable=False,
+    option_type_id: Mapped[int] = mapped_column(
+        ForeignKey("option_types.id"),
     )
 
-    SortOrder: Mapped[int | None] = mapped_column()
+    value: Mapped[str | None]
 
-    Variant = relationship(
+    variant = relationship(
         "Variant",
-        back_populates="Options",
+        back_populates="options",
     )
 
-    OptionType = relationship(
+    option_type = relationship(
         "OptionType",
+        back_populates="variant_options",
     )

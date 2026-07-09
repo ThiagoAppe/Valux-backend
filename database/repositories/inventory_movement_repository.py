@@ -17,11 +17,11 @@ class InventoryMovementRepository:
     ) -> InventoryMovement:
 
         movement = InventoryMovement(
-            VariantId=variant_id,
+            Variantid=variant_id,
             Type=movement_type,
             Quantity=quantity,
-            ReferenceType=reference_type,
-            ReferenceId=reference_id
+            reference_type=reference_type,
+            Referenceid=reference_id
         )
 
         self.db.add(movement)
@@ -29,13 +29,13 @@ class InventoryMovementRepository:
 
         return movement
 
-    def GetByVariantId(self, variant_id: int) -> list[InventoryMovement]:
+    def GetByVariantid(self, variant_id: int) -> list[InventoryMovement]:
         return self.db.query(InventoryMovement).filter(
-            InventoryMovement.VariantId == variant_id
+            InventoryMovement.Variantid == variant_id
         ).all()
 
     def GetByReference(self, reference_type: str, reference_id: int):
         return self.db.query(InventoryMovement).filter(
-            InventoryMovement.ReferenceType == reference_type,
-            InventoryMovement.ReferenceId == reference_id
+            InventoryMovement.reference_type == reference_type,
+            InventoryMovement.Referenceid == reference_id
         ).all()

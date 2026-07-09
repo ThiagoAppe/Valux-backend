@@ -14,24 +14,24 @@ from database.connection import Base
 class Cart(Base):
     __tablename__ = "carts"
 
-    Id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    CustomerId: Mapped[int | None] = mapped_column(
+    customerid: Mapped[int | None] = mapped_column(
         ForeignKey("customers.id"),
     )
 
-    CreatedAt: Mapped[datetime | None] = mapped_column(
+    created_at: Mapped[datetime | None] = mapped_column(
         DateTime,
     )
 
-    Status: Mapped[str | None] = mapped_column(String)
+    status: Mapped[str | None] = mapped_column(String)
 
-    Customer = relationship(
+    customer = relationship(
         "Customer",
-        back_populates="Carts",
+        back_populates="carts",
     )
 
-    Items = relationship(
+    items = relationship(
         "CartItem",
-        back_populates="Cart",
+        back_populates="cart",
     )

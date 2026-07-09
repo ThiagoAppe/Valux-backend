@@ -8,5 +8,5 @@ class UserService:
     ):
         self.UserRepository = UserRepositoryInstance
 
-    def GetUser(self, UserId: int):
-        return self.UserRepository.GetById(UserId)
+    def GetUser(self, Userid: int):
+        return self.UserRepository.GetByid(Userid)

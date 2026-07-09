@@ -14,7 +14,7 @@ class InventoryService:
     def _GetInventoryLocked(self, variant_id: int) -> Inventory:
         stmt = (
             select(Inventory)
-            .where(Inventory.VariantId == variant_id)
+            .where(Inventory.Variantid == variant_id)
             .with_for_update()
         )
 
@@ -22,9 +22,9 @@ class InventoryService:
 
         if not inventory:
             inventory = Inventory(
-                VariantId=variant_id,
-                StockAvailable=0,
-                StockReserved=0
+                Variantid=variant_id,
+                stock_available=0,
+                stock_reserved=0
             )
             self.db.add(inventory)
             self.db.flush()
@@ -40,19 +40,19 @@ class InventoryService:
     ):
         inventory = self._GetInventoryLocked(variant_id)
 
-        if inventory.StockAvailable < quantity:
+        if inventory.stock_available < quantity:
             raise ValueError("Insufficient stock")
 
-        inventory.StockAvailable -= quantity
-        inventory.StockReserved += quantity
+        inventory.stock_available -= quantity
+        inventory.stock_reserved += quantity
 
         self.db.add(
             InventoryMovement(
-                VariantId=variant_id,
+                Variantid=variant_id,
                 Type="reserve",
                 Quantity=quantity,
-                ReferenceType=reference_type,
-                ReferenceId=reference_id
+                reference_type=reference_type,
+                Referenceid=reference_id
             )
         )
 
@@ -69,16 +69,16 @@ class InventoryService:
     ):
         inventory = self._GetInventoryLocked(variant_id)
 
-        inventory.StockReserved -= quantity
-        inventory.StockAvailable += quantity
+        inventory.stock_reserved -= quantity
+        inventory.stock_available += quantity
 
         self.db.add(
             InventoryMovement(
-                VariantId=variant_id,
+                Variantid=variant_id,
                 Type="release",
                 Quantity=quantity,
-                ReferenceType=reference_type,
-                ReferenceId=reference_id
+                reference_type=reference_type,
+                Referenceid=reference_id
             )
         )
 
@@ -95,18 +95,18 @@ class InventoryService:
     ):
         inventory = self._GetInventoryLocked(variant_id)
 
-        if inventory.StockReserved < quantity:
+        if inventory.stock_reserved < quantity:
             raise ValueError("Invalid reserved stock")
 
-        inventory.StockReserved -= quantity
+        inventory.stock_reserved -= quantity
 
         self.db.add(
             InventoryMovement(
-                VariantId=variant_id,
+                Variantid=variant_id,
                 Type="out",
                 Quantity=quantity,
-                ReferenceType=reference_type,
-                ReferenceId=reference_id
+                reference_type=reference_type,
+                Referenceid=reference_id
             )
         )
 
@@ -123,15 +123,15 @@ class InventoryService:
     ):
         inventory = self._GetInventoryLocked(variant_id)
 
-        inventory.StockAvailable += quantity
+        inventory.stock_available += quantity
 
         self.db.add(
             InventoryMovement(
-                VariantId=variant_id,
+                Variantid=variant_id,
                 Type="in",
                 Quantity=quantity,
-                ReferenceType=reference_type,
-                ReferenceId=reference_id
+                reference_type=reference_type,
+                Referenceid=reference_id
             )
         )
 

@@ -8,6 +8,7 @@ from sqlalchemy import Numeric
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from database.connection import Base
 
@@ -15,63 +16,61 @@ from database.connection import Base
 class Variant(Base):
     __tablename__ = "variants"
 
-    Id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    ProductId: Mapped[int | None] = mapped_column(
+    product_id: Mapped[int | None] = mapped_column(
         ForeignKey("products.id"),
     )
 
-    Sku: Mapped[str] = mapped_column(
+    sku: Mapped[str] = mapped_column(
         String,
         unique=True,
         nullable=False,
     )
 
-    Name: Mapped[str | None] = mapped_column(
+    name: Mapped[str | None] = mapped_column(
         String,
     )
 
-    Price: Mapped[Decimal | None] = mapped_column(
+    price: Mapped[Decimal | None] = mapped_column(
         Numeric(10, 2),
     )
 
-    Active: Mapped[bool | None] = mapped_column(
+    active: Mapped[bool | None] = mapped_column(
         Boolean,
     )
 
-    CreatedAt: Mapped[datetime | None] = mapped_column(
+    created_at: Mapped[datetime | None] = mapped_column(
         DateTime,
     )
 
-    from sqlalchemy.orm import relationship
-
-    Product = relationship(
+    product = relationship(
         "Product",
-        back_populates="Variants",
+        back_populates="variants",
     )
 
-    Options = relationship(
+    options = relationship(
         "VariantOption",
-        back_populates="Variant",
+        back_populates="variant",
     )
 
-    CartItems = relationship(
+    cart_items = relationship(
         "CartItem",
-        back_populates="Variant",
+        back_populates="variant",
     )
 
-    OrderItems = relationship(
+    order_items = relationship(
         "OrderItem",
-        back_populates="Variant",
+        back_populates="variant",
     )
 
-    Inventory = relationship(
-        "Inventory", 
-        back_populates="Variant",
-        uselist=False
+    inventory = relationship(
+        "Inventory",
+        back_populates="variant",
+        uselist=False,
     )
-    
-    InventoryMovements = relationship(
+
+    inventory_movements = relationship(
         "InventoryMovement",
-        back_populates="Variant"
+        back_populates="variant",
     )

@@ -7,8 +7,8 @@ class UserRepository:
     def __init__(self, Db: Session):
         self.Db = Db
 
-    def GetById(self, UserId: int) -> User | None:
-        return self.Db.get(User, UserId)
+    def GetByid(self, Userid: int) -> User | None:
+        return self.Db.get(User, Userid)
 
     def GetByEmail(self, Email: str) -> User | None:
         return (
